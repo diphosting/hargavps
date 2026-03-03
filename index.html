@@ -3,47 +3,90 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sistem Kas Kelas v5.0</title>
+    <title>Sistem Kas Kelas v6.0 - Premium</title>
     <style>
-        :root { --primary: #3498db; --success: #2ecc71; --danger: #e74c3c; --dark: #2c3e50; --bg: #f4f7f6; }
-        body { font-family: 'Segoe UI', sans-serif; background: var(--bg); display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; padding: 10px; }
+        :root {
+            --primary: #00d2ff;
+            --secondary: #3a7bd5;
+            --success: #00b09b;
+            --danger: #ff416c;
+            --dark: #232526;
+            --bg: #f0f4f8;
+            --white: #ffffff;
+            --grad-blue: linear-gradient(135deg, #00d2ff 0%, #3a7bd5 100%);
+            --grad-green: linear-gradient(135deg, #96e6a1 0%, #d4fc79 100%);
+        }
+
+        body { 
+            font-family: 'Poppins', 'Segoe UI', sans-serif; 
+            background: var(--bg); 
+            background-image: radial-gradient(circle at top right, #e0eafc, #cfdef3);
+            display: flex; justify-content: center; align-items: center; 
+            min-height: 100vh; margin: 0; padding: 15px;
+        }
         
-        .card { background: white; padding: 30px; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); width: 100%; max-width: 450px; text-align: center; box-sizing: border-box; }
+        .card { 
+            background: var(--white); 
+            padding: 30px; border-radius: 25px; 
+            box-shadow: 0 15px 35px rgba(58, 123, 213, 0.15); 
+            width: 100%; max-width: 450px; text-align: center; 
+            box-sizing: border-box; border: 1px solid rgba(255,255,255,0.8);
+        }
+        
         .admin-card { max-width: 900px; }
 
-        h2 { color: var(--dark); margin-bottom: 10px; }
-        p.subtitle { color: #7f8c8d; margin-bottom: 25px; }
+        h2 { color: var(--secondary); margin-bottom: 5px; font-weight: 700; }
+        .subtitle { color: #7f8c8d; margin-bottom: 25px; font-size: 14px; }
+        .badge-minggu { 
+            display: inline-block; background: var(--grad-blue); color: white; 
+            padding: 5px 15px; border-radius: 50px; font-size: 12px; margin-bottom: 15px;
+        }
 
-        input { width: 100%; padding: 14px; margin: 10px 0; border: 2px solid #eee; border-radius: 10px; font-size: 16px; box-sizing: border-box; outline: none; transition: 0.3s; }
-        input:focus { border-color: var(--primary); }
+        input { 
+            width: 100%; padding: 14px; margin: 10px 0; 
+            border: 2px solid #eef2f7; border-radius: 12px; 
+            font-size: 16px; box-sizing: border-box; outline: none; transition: 0.3s; 
+        }
+        input:focus { border-color: var(--primary); box-shadow: 0 0 10px rgba(0, 210, 255, 0.2); }
         
-        button { width: 100%; padding: 14px; border: none; border-radius: 10px; cursor: pointer; font-weight: bold; font-size: 16px; transition: 0.3s; }
-        .btn-primary { background: var(--primary); color: white; margin-top: 10px; }
-        .btn-primary:hover { background: #2980b9; }
-        .btn-ghost { background: none; color: #bdc3c7; margin-top: 20px; font-size: 13px; }
+        button { 
+            width: 100%; padding: 14px; border: none; border-radius: 12px; 
+            cursor: pointer; font-weight: 700; font-size: 15px; transition: 0.4s; 
+        }
+        .btn-primary { background: var(--grad-blue); color: white; margin-top: 10px; box-shadow: 0 4px 15px rgba(58, 123, 213, 0.3); }
+        .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(58, 123, 213, 0.4); }
+        
+        .btn-bayar { background: var(--success); color: white; padding: 6px 12px; border-radius: 8px; font-size: 12px; }
+        .btn-ghost { background: none; color: #b2bec3; margin-top: 20px; font-size: 13px; font-weight: 400; }
 
-        .status-box { margin: 20px 0; padding: 15px; border-radius: 12px; text-align: left; font-size: 14px; }
-        .lunas-box { background: #eafaf1; color: #27ae60; border: 1px solid #d5f5e3; }
-        .tunggakan-box { background: #fdf2f2; color: #e74c3c; border: 1px solid #fadbd8; }
+        .status-box { margin: 20px 0; padding: 18px; border-radius: 15px; text-align: left; font-size: 14px; line-height: 1.5; }
+        .lunas-box { background: #dff9fb; color: #0984e3; border-left: 5px solid #00d2ff; }
+        .tunggakan-box { background: #fff5f5; color: #d63031; border-left: 5px solid #ff416c; }
         
-        table { width: 100%; margin-top: 15px; border-collapse: collapse; background: #fff; }
-        th, td { padding: 12px; border-bottom: 1px solid #eee; text-align: left; }
-        th { background: #f8f9fa; color: var(--dark); }
-        
-        .checkbox-custom { width: 20px; height: 20px; cursor: pointer; }
+        table { width: 100%; margin-top: 15px; border-collapse: separate; border-spacing: 0 8px; }
+        th { padding: 12px; color: #636e72; font-size: 13px; text-transform: uppercase; letter-spacing: 1px; }
+        td { padding: 15px 10px; background: #f8fbff; border-top: 1px solid #edf2f7; border-bottom: 1px solid #edf2f7; }
+        td:first-child { border-left: 1px solid #edf2f7; border-top-left-radius: 10px; border-bottom-left-radius: 10px; }
+        td:last-child { border-right: 1px solid #edf2f7; border-top-right-radius: 10px; border-bottom-right-radius: 10px; }
+
+        /* MODAL */
+        .modal { display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); align-items: center; justify-content: center; backdrop-filter: blur(5px); }
+        .modal-content { background: white; padding: 30px; border-radius: 25px; width: 90%; max-width: 360px; text-align: center; animation: slideIn 0.3s ease; }
+        @keyframes slideIn { from { transform: translateY(20px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+        .qr-img { width: 220px; height: 220px; margin: 15px 0; border: 8px solid #f1f2f6; border-radius: 15px; }
+
         .hidden { display: none; }
-        .scroll-table { overflow-x: auto; margin-top: 15px; border-radius: 10px; border: 1px solid #eee; }
-
-        @media (max-width: 480px) { .card { padding: 20px; } }
+        .scroll-table { overflow-x: auto; margin-top: 15px; }
     </style>
 </head>
 <body>
 
 <div id="viewLogin" class="card">
+    <div class="badge-minggu" id="infoTglOtomatis">Memuat Tanggal...</div>
     <h2>💰 Kas Kelas</h2>
-    <p class="subtitle">Februari 2026 - Minggu 1 s/d 4</p>
-    <input type="text" id="inputCariNama" placeholder="Ketik nama panggilanmu...">
-    <button class="btn-primary" onclick="prosesLoginSiswa()">Cek Status Kas</button>
+    <p class="subtitle" id="labelBulan">Februari 2026</p>
+    <input type="text" id="inputCariNama" placeholder="Siapa namamu?">
+    <button class="btn-primary" onclick="prosesLoginSiswa()">Cek Status Saya</button>
     <button class="btn-ghost" onclick="gantiKeView('viewAdminLogin')">Login Bendahara</button>
 </div>
 
@@ -52,24 +95,24 @@
     <div id="boxStatus" class="status-box"></div>
     <table>
         <thead>
-            <tr><th>Periode</th><th>Status</th></tr>
+            <tr><th>Periode</th><th>Status</th><th>Aksi</th></tr>
         </thead>
         <tbody id="listKasSiswa"></tbody>
     </table>
-    <button class="btn-primary" style="margin-top:20px" onclick="location.reload()">Kembali</button>
+    <button class="btn-primary" style="margin-top:20px" onclick="location.reload()">Selesai & Keluar</button>
 </div>
 
 <div id="viewAdminLogin" class="card hidden">
-    <h2>Login Admin</h2>
-    <p class="subtitle">Khusus Bendahara Kelas</p>
-    <input type="password" id="passAdmin" placeholder="Masukkan Password Rahasia">
-    <button class="btn-primary" onclick="prosesLoginAdmin()">Masuk ke Panel</button>
-    <button class="btn-ghost" onclick="location.reload()">Batal</button>
+    <h2>Akses Bendahara</h2>
+    <p class="subtitle">Masukkan kode rahasia</p>
+    <input type="password" id="passAdmin" placeholder="Password Admin">
+    <button class="btn-primary" onclick="prosesLoginAdmin()">Masuk Panel</button>
+    <button class="btn-ghost" onclick="gantiKeView('viewLogin')">Kembali</button>
 </div>
 
 <div id="viewAdminPanel" class="card admin-card hidden">
-    <h2>Panel Pengaturan Kas</h2>
-    <p>Klik kotak untuk mengubah status (Otomatis Tersimpan)</p>
+    <h2>Panel Kontrol Kas</h2>
+    <p class="subtitle">Update status pembayaran seluruh siswa</p>
     <div class="scroll-table">
         <table>
             <thead>
@@ -81,11 +124,23 @@
             <tbody id="tabelMasterAdmin"></tbody>
         </table>
     </div>
-    <button class="btn-primary" style="margin-top:25px; max-width: 200px;" onclick="location.reload()">Keluar & Logout</button>
+    <button class="btn-primary" style="margin-top:25px; max-width: 250px;" onclick="location.reload()">Simpan & Logout</button>
+</div>
+
+<div id="modalBayar" class="modal">
+    <div class="modal-content">
+        <h3 id="modalTitle">Scan Pembayaran</h3>
+        <p style="font-size: 13px; color: #636e72;">Silahkan transfer sesuai nominal kas kelas</p>
+        
+        <img src="https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=CONTOH_QR_PAYMENT" class="qr-img" id="imgQR">
+        
+        <p id="modalDetail" style="font-weight: bold; color: var(--secondary);"></p>
+        <button class="btn-primary" onclick="konfirmasiBayar()">Saya Sudah Transfer</button>
+        <button class="btn-ghost" style="color:var(--danger)" onclick="tutupModal()">Batal</button>
+    </div>
 </div>
 
 <script>
-    // DATA MASTER
     const daftarSiswa = [
         "Akhlis Tsani", "Angga Maesya Putra", "Anwarul Fahmi Ramadhani", "Arya Galih Pratama",
         "Ega Ginaryo Al Amin", "Galih Prasetyo", "M. Maulin Supriyanto", "M. Agung Saputra",
@@ -97,96 +152,107 @@
         "Tirta Bayu Saputra", "Tobias Arka Diva", "Wafiq Zam Zami"
     ];
 
-    const PASSWORD_BNDHR = "bendahara123"; // GANTI PASSWORD DI SINI
-    let dbKas = JSON.parse(localStorage.getItem('db_kas_final')) || {};
+    const PASSWORD_BNDHR = "bendahara123";
+    let dbKas = JSON.parse(localStorage.getItem('db_kas_v6')) || {};
+    let dataBayarAktif = {};
 
-    // FUNGSI NAVIGASI
-    function gantiKeView(idTujuan) {
+    // --- LOGIKA OTOMATIS TANGGAL & MINGGU ---
+    function updateWaktuOtomatis() {
+        const tgl = new Date();
+        const bulanNames = ["Januari", "Februari", "Maret", "April", "Mei", "Juni", "Juli", "Agustus", "September", "Oktober", "November", "Desember"];
+        
+        // Hitung Minggu Keberapa (Sederhana: 1-7 tgl m1, dst)
+        const hari = tgl.getDate();
+        let mingguKe = 1;
+        if(hari > 7) mingguKe = 2;
+        if(hari > 14) mingguKe = 3;
+        if(hari > 21) mingguKe = 4;
+
+        document.getElementById('labelBulan').innerText = `${bulanNames[tgl.getMonth()]} ${tgl.getFullYear()}`;
+        document.getElementById('infoTglOtomatis').innerText = `Minggu ke-${mingguKe} (Hari ini: ${hari} ${bulanNames[tgl.getMonth()]})`;
+    }
+    updateWaktuOtomatis();
+
+    function gantiKeView(id) {
         document.querySelectorAll('.card').forEach(c => c.classList.add('hidden'));
-        document.getElementById(idTujuan).classList.remove('hidden');
+        document.getElementById(id).classList.remove('hidden');
     }
 
-    // LOGIKA SISWA
     function prosesLoginSiswa() {
-        const keyword = document.getElementById('inputCariNama').value.trim().toLowerCase();
+        const key = document.getElementById('inputCariNama').value.trim().toLowerCase();
+        if(key.length < 3) return alert("Ketik minimal 3 huruf!");
         
-        if (keyword.length < 3) {
-            alert("Ketik minimal 3 huruf agar pencarian tepat!");
-            return;
-        }
-
-        const matches = daftarSiswa.filter(n => n.toLowerCase().includes(keyword));
-
-        if (matches.length === 1) {
-            tampilkanDashboardSiswa(matches[0]);
-        } else if (matches.length > 1) {
-            alert("Ada " + matches.length + " nama yang mirip. Coba ketik lebih lengkap!");
-        } else {
-            alert("Nama tidak ditemukan dalam daftar kelas.");
-        }
+        const match = daftarSiswa.filter(n => n.toLowerCase().includes(key));
+        if(match.length === 1) renderSiswa(match[0]);
+        else if(match.length > 1) alert("Nama kurang spesifik!");
+        else alert("Nama tidak ditemukan!");
     }
 
-    function tampilkanDashboardSiswa(namaLengkap) {
+    function renderSiswa(nama) {
         gantiKeView('viewSiswa');
-        document.getElementById('namaUser').innerText = "Halo, " + namaLengkap;
+        document.getElementById('namaUser').innerText = "Halo, " + nama.split(' ')[0] + "!";
         
-        let htmlList = "";
+        let html = "";
         let nunggak = 0;
-
         for(let i=1; i<=4; i++) {
-            let lunas = dbKas[namaLengkap + "_m" + i] || false;
+            let lunas = dbKas[nama + "_m" + i];
             if(!lunas) nunggak++;
-            htmlList += `
-                <tr>
-                    <td>Minggu ke-${i}</td>
-                    <td style="font-weight:bold; color:${lunas ? '#2ecc71' : '#e74c3c'}">
-                        ${lunas ? '✅ Lunas' : '❌ Belum Bayar'}
-                    </td>
-                </tr>`;
+            html += `<tr>
+                <td>Minggu ${i}</td>
+                <td style="font-weight:bold; color:${lunas ? '#2ecc71' : '#e74c3c'}">${lunas ? '✅ Lunas' : '❌ Belum'}</td>
+                <td>${!lunas ? `<button class="btn-bayar" onclick="bukaModalBayar('${nama}', ${i})">BAYAR</button>` : '-'}</td>
+            </tr>`;
         }
-
+        document.getElementById('listKasSiswa').innerHTML = html;
         const box = document.getElementById('boxStatus');
         box.className = "status-box " + (nunggak > 0 ? "tunggakan-box" : "lunas-box");
-        box.innerHTML = nunggak > 0 
-            ? `<strong>Peringatan:</strong> Kamu punya <b>${nunggak}</b> minggu yang belum dibayar.` 
-            : `<strong>Hebat!</strong> Pembayaran kasmu sudah lengkap bulan ini.`;
-            
-        document.getElementById('listKasSiswa').innerHTML = htmlList;
+        box.innerHTML = nunggak > 0 ? `⚠️ Kamu belum bayar <b>${nunggak}</b> minggu.` : `✨ Keren! Tabungan kasmu aman bulan ini.`;
     }
 
-    // LOGIKA ADMIN
+    // --- LOGIKA MODAL QR ---
+    function bukaModalBayar(nama, m) {
+        dataBayarAktif = { nama, m };
+        document.getElementById('modalDetail').innerText = `${nama} - Kas Minggu ${m}`;
+        document.getElementById('modalBayar').style.display = 'flex';
+    }
+
+    function tutupModal() { document.getElementById('modalBayar').style.display = 'none'; }
+
+    function konfirmasiBayar() {
+        if(confirm("Pastikan kamu sudah mentransfer uang sesuai nominal!")) {
+            const key = dataBayarAktif.nama + "_m" + dataBayarAktif.m;
+            dbKas[key] = true;
+            localStorage.setItem('db_kas_v6', JSON.stringify(dbKas));
+            alert("Pembayaran berhasil dicatat!");
+            tutupModal();
+            renderSiswa(dataBayarAktif.nama);
+        }
+    }
+
+    // --- LOGIKA ADMIN ---
     function prosesLoginAdmin() {
         if(document.getElementById('passAdmin').value === PASSWORD_BNDHR) {
             gantiKeView('viewAdminPanel');
-            renderPanelAdmin();
-        } else {
-            alert("Password Salah!");
-        }
+            renderAdmin();
+        } else alert("Password salah!");
     }
 
-    function renderPanelAdmin() {
+    function renderAdmin() {
         const body = document.getElementById('tabelMasterAdmin');
         body.innerHTML = "";
-        
-        daftarSiswa.forEach(nama => {
-            let row = `<tr><td>${nama}</td>`;
-            for(let m=1; m<=4; m++) {
-                let key = nama + "_m" + m;
-                let isLunas = dbKas[key] || false;
-                row += `<td style="text-align:center">
-                            <input type="checkbox" class="checkbox-custom" 
-                            ${isLunas ? 'checked' : ''} 
-                            onchange="updateData('${key}')">
-                        </td>`;
+        daftarSiswa.forEach(n => {
+            let row = `<tr><td>${n}</td>`;
+            for(let i=1; i<=4; i++) {
+                let key = n + "_m" + i;
+                row += `<td style="text-align:center"><input type="checkbox" ${dbKas[key] ? 'checked' : ''} onchange="updateAdmin('${key}')"></td>`;
             }
-            row += `</tr>`;
-            body.innerHTML += row;
+            body.innerHTML += row + `</tr>`;
         });
     }
 
-    function updateData(key) {
+    function updateAdmin(key) {
         dbKas[key] = !dbKas[key];
-        localStorage.setItem('db_kas_final', JSON.stringify(dbKas));
+        localStorage.setItem('db_kas_v6', JSON.stringify(dbKas));
     }
 </script>
 </body>
