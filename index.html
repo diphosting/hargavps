@@ -153,12 +153,22 @@
     }
 
     function prosesLoginSiswa() {
-        const key = document.getElementById('inputCariNama').value.trim().toLowerCase();
-        if(key.length < 3) return alert("Ketik minimal 3 huruf!");
-        const match = daftarSiswa.filter(n => n.toLowerCase().includes(key));
-        if(match.length === 1) renderDashboardSiswa(match[0]);
-        else alert("Nama tidak ditemukan!");
+    const key = document.getElementById('inputCariNama').value.trim().toLowerCase();
+    // Ubah jadi minimal 2 huruf agar nama pendek seperti 'Ardi' lancar
+    if(key.length < 2) return alert("Ketik minimal 2 huruf!"); 
+    
+    const match = daftarSiswa.filter(n => n.toLowerCase().includes(key));
+    
+    if(match.length === 1) {
+        renderDashboardSiswa(match[0]);
+    } else if(match.length > 1) {
+        // Jika ada banyak nama yang mengandung kata tersebut
+        alert("Nama kurang spesifik! Ketik lebih lengkap (Contoh: Ardiyansyah)");
+    } else {
+        alert("Nama tidak ditemukan!");
     }
+}
+
 
     function renderDashboardSiswa(nama) {
         gantiKeView('viewSiswa');
