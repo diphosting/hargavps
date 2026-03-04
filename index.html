@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>KAS TKR-A 75K TARGET</title>
+    <title>KAS TKR-A</title>
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;800&display=swap" rel="stylesheet">
     <style>
         :root { --accent: #FF3D71; --primary: #6236FF; --success: #00D68F; --glass: rgba(255, 255, 255, 0.95); }
@@ -12,14 +12,14 @@
         .app-frame { width: 100%; max-width: 450px; min-height: 100vh; margin: 0 auto; display: flex; flex-direction: column; }
         header { padding: 30px 25px 10px; text-align: center; color: white; }
         .main-card { background: var(--glass); margin: 0 15px 100px; padding: 20px; border-radius: 25px; box-shadow: 0 15px 35px rgba(0,0,0,0.3); }
-        .search-box { background: #EDF1F7; border-radius: 15px; padding: 12px 15px; margin: 15px 0; display: flex; align-items: center; }
+        .search-box { background: #EDF1F7; border-radius: 15px; padding: 12px 15px; margin: 15px 0; display: flex; align-items: center; border:none; width:100%; box-sizing:border-box; }
         input { border: none; background: transparent; width: 100%; outline: none; font-family: inherit; font-size: 16px; }
         .btn-action { background: var(--primary); color: white; border: none; width: 100%; padding: 15px; border-radius: 15px; font-weight: 700; cursor: pointer; }
         .admin-item { border-bottom: 1px solid #eee; padding: 15px 0; }
         .status-btn { font-size: 22px; cursor: pointer; padding: 3px; display: inline-block; -webkit-tap-highlight-color: transparent; }
         
-        /* PROGRESS BAR STYLE */
-        .progress-container { background: #eee; border-radius: 10px; height: 8px; width: 100%; margin: 8px 0; overflow: hidden; }
+        /* PROGRESS BAR */
+        .progress-container { background: #e0e0e0; border-radius: 10px; height: 8px; width: 100%; margin: 8px 0; overflow: hidden; }
         .progress-bar { background: var(--success); height: 100%; transition: 0.5s; width: 0%; }
         .progress-text { font-size: 11px; font-weight: 700; color: #666; }
 
@@ -27,7 +27,11 @@
         .nav-link { text-decoration: none; color: #8F9BB3; font-weight: 600; font-size: 14px; cursor: pointer; }
         .nav-link.active { color: var(--primary); }
         .hidden { display: none; }
-        .scroll-area { max-height: 400px; overflow-y: auto; padding-right: 5px; }
+        .scroll-area { max-height: 400px; overflow-y: auto; padding-right: 5px; margin-top:15px; }
+
+        /* MODAL */
+        .modal { position: fixed; inset: 0; background: rgba(0,0,0,0.7); display: none; align-items: center; justify-content: center; z-index: 200; }
+        .m-box { background: white; padding: 25px; border-radius: 25px; width: 85%; text-align: center; box-sizing: border-box;}
     </style>
 </head>
 <body>
@@ -35,38 +39,51 @@
 <div class="bg-canvas"></div>
 
 <div class="app-frame">
-    <header><h1>KAS TKR-A 🚀</h1><p style="opacity:0.7">Target: Rp75.000 / Siswa</p></header>
+    <header><h1>KAS TKR-A 🚀</h1><p style="opacity:0.7">Powered By Tobias</p></header>
 
     <div id="viewLogin" class="main-card">
         <h3 style="margin:0;">Cek Tabungan Kas</h3>
-        <div class="search-box"><input type="text" id="inNama" placeholder="Ketik namamu..."></div>
-        <button class="btn-action" onclick="cekNama()">Cek Progress ✨</button>
+        <div class="search-box"><input type="text" id="inNama" placeholder="Ketik namamu (Contoh: Tobias)"></div>
+        <button class="btn-action" onclick="cekNama()" style="width:100%;">Cek Progress ✨</button>
     </div>
 
     <div id="viewSiswa" class="main-card hidden">
         <h2 id="txtUser" style="color: var(--primary); margin:0;">User</h2>
         <div id="progUserContainer"></div>
-        <div id="listMingguan" class="scroll-area" style="margin-top:15px;"></div>
+        <div id="listMingguan" class="scroll-area"></div>
         <button class="btn-action" onclick="window.location.reload()" style="background:#8F9BB3; margin-top:20px; width:100%;">Kembali</button>
     </div>
 
     <div id="viewAdmin" class="main-card hidden">
         <div style="display:grid; grid-template-columns: 1fr 1fr; gap:10px; margin-bottom:15px;">
             <div style="background:#f0f3f8; padding:12px; border-radius:15px;">Total Kas:<br><b id="admSaldo" style="color:var(--success);">Rp0</b></div>
-            <div style="background:#f0f3f8; padding:12px; border-radius:15px;">Siswa Lunas:<br><b id="admLunasCount" style="color:var(--primary);">0</b></div>
+            <div style="background:#f0f3f8; padding:12px; border-radius:15px;">Lunas 75K:<br><b id="admLunasCount" style="color:var(--primary);">0</b></div>
         </div>
         <div class="scroll-area" id="listAdmSiswa"></div>
     </div>
 
     <div id="viewAdminLogin" class="main-card hidden">
         <h3>Akses Bendahara</h3>
-        <input type="password" id="pAdm" class="search-box" style="width:100%; box-sizing:border-box;" placeholder="Password">
+        <input type="password" id="pAdm" class="search-box" placeholder="Password">
         <button class="btn-action" onclick="authAdmin()" style="width:100%;">Login</button>
     </div>
 
     <div class="nav-bar">
         <div class="nav-link active" id="navHome" onclick="window.location.reload()">Beranda</div>
         <div class="nav-link" id="navAdmin" onclick="gView('viewAdminLogin')">Admin</div>
+    </div>
+</div>
+
+<div id="modalPay" class="modal">
+    <div class="m-box">
+        <h3 style="margin-top:0;">Bayar Kas 💸</h3>
+        <select id="metod" class="search-box" style="margin-bottom:15px;">
+            <option value="tunai">💵 Bayar Tunai</option>
+            <option value="qris">📱 Scan QRIS</option>
+        </select>
+        <img id="qImg" src="https://files.catbox.moe/409cau.png" style="width:100%; border-radius:15px; display:none; margin-bottom:15px;">
+        <button class="btn-action" onclick="konfirmasiWA()" style="width:100%;">Kirim Bukti WA</button>
+        <p onclick="closeM()" style="color:var(--accent); cursor:pointer; margin-top:15px; font-weight:700;">Batal</p>
     </div>
 </div>
 
@@ -99,7 +116,7 @@
         "Tirta Bayu Saputra", "Tobias Arka Diva", "Wafiq Zam Zami"
     ];
 
-    let dataKas = {}; let curSiswa = "";
+    let dataKas = {}; let curSiswa = ""; let curWeek = 0;
     const JML_MINGGU = 15;
     const HARGA_PER_MINGGU = 5000;
     const TARGET_TOTAL = 75000;
@@ -131,7 +148,7 @@
         } else alert("Nama tidak ditemukan!");
     };
 
-    function showSiswa() {
+    window.showSiswa = () => {
         window.gView('viewSiswa');
         document.getElementById('txtUser').innerText = curSiswa;
         let h = ""; let lunasCount = 0;
@@ -140,9 +157,12 @@
             let s = dataKas[cleanKey(curSiswa) + "_m" + i] || "belum";
             if(s === 'lunas') lunasCount++;
             let color = s==='lunas'?'var(--success)':(s==='pending'?'orange':'#8F9BB3');
-            h += `<div style="display:flex; justify-content:space-between; padding:12px 0; border-bottom:1px solid #eee;">
-                <span style="font-size:14px;">Minggu ${i}</span>
-                <span style="color:${color}; font-weight:800; font-size:12px;">${s.toUpperCase()}</span>
+            h += `<div style="display:flex; justify-content:space-between; padding:12px 0; border-bottom:1px solid #eee; align-items:center;">
+                <span style="font-size:14px; font-weight:600;">Minggu ${i}</span>
+                <div style="display:flex; align-items:center;">
+                    <span style="color:${color}; font-weight:800; font-size:11px; margin-right:10px;">${s.toUpperCase()}</span>
+                    ${s==='belum'?`<button onclick="openM(${i})" style="border:none; background:var(--primary); color:white; padding:6px 10px; border-radius:8px; font-size:10px; font-weight:700;">BAYAR</button>`:''}
+                </div>
             </div>`;
         }
         
@@ -155,6 +175,19 @@
             <div class="progress-text">${persen}% Progres</div>`;
         document.getElementById('listMingguan').innerHTML = h;
     }
+
+    // FUNGSI MODAL
+    window.openM = (w) => { curWeek = w; document.getElementById('modalPay').style.display='flex'; };
+    window.closeM = () => document.getElementById('modalPay').style.display='none';
+    document.getElementById('metod').onchange = (e) => { document.getElementById('qImg').style.display = e.target.value === 'qris' ? 'block' : 'none'; };
+
+    window.konfirmasiWA = () => {
+        const m = document.getElementById('metod').value;
+        const key = cleanKey(curSiswa) + "_m" + curWeek;
+        update(dbRef, { [key]: "pending" });
+        window.open(`https://wa.me/62895630224260?text=Konfirmasi Kas *${curSiswa}* M${curWeek} (${m})`, '_blank');
+        window.closeM();
+    };
 
     window.authAdmin = () => {
         if(document.getElementById('pAdm').value === 'bendahara123') { window.gView('viewAdmin'); renderAdmin(); }
