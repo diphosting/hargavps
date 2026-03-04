@@ -3,34 +3,24 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Kas TKR-A Fixed</title>
+    <title>KAS TKR-A PRO</title>
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;800&display=swap" rel="stylesheet">
     <style>
         :root { --accent: #FF3D71; --primary: #6236FF; --success: #00D68F; --glass: rgba(255, 255, 255, 0.95); }
         body { font-family: 'Outfit', sans-serif; margin: 0; padding: 0; background: #060918; color: #1A1A1A; overflow-x: hidden; }
         .bg-canvas { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; background: radial-gradient(circle at 0% 0%, #1a1e3b 0%, #060918 100%); }
-        .blob { position: absolute; width: 250px; height: 250px; background: var(--primary); filter: blur(80px); border-radius: 50%; opacity: 0.3; animation: drift 15s infinite alternate; }
-        @keyframes drift { from { transform: translate(0,0); } to { transform: translate(40px, 80px); } }
-        
         .app-frame { width: 100%; max-width: 450px; min-height: 100vh; margin: 0 auto; display: flex; flex-direction: column; }
-        header { padding: 40px 25px 20px; text-align: center; }
-        header h1 { color: white; margin: 0; font-size: 30px; font-weight: 800; }
-        
-        .main-card { background: var(--glass); margin: 0 15px 100px; padding: 20px; border-radius: 25px; box-shadow: 0 15px 35px rgba(0,0,0,0.3); animation: pop 0.4s ease; }
-        
+        header { padding: 40px 25px 20px; text-align: center; color: white; }
+        .main-card { background: var(--glass); margin: 0 15px 100px; padding: 20px; border-radius: 25px; box-shadow: 0 15px 35px rgba(0,0,0,0.3); }
         .search-box { background: #EDF1F7; border-radius: 15px; padding: 12px 15px; margin: 15px 0; display: flex; align-items: center; }
         input { border: none; background: transparent; width: 100%; outline: none; font-family: inherit; font-size: 16px; }
-        .btn-action { background: var(--primary); color: white; border: none; width: 100%; padding: 15px; border-radius: 15px; font-weight: 700; cursor: pointer; }
-        
-        .item-row { display: flex; justify-content: space-between; align-items: center; padding: 12px 0; border-bottom: 1px solid #eee; }
-        .admin-item { border-bottom: 1px solid #eee; padding: 12px 0; }
-        .status-btn { font-size: 24px; cursor: pointer; padding: 5px; display: inline-block; transition: 0.2s; -webkit-tap-highlight-color: transparent; }
-        .status-btn:active { transform: scale(1.4); }
-
+        .btn-action { background: var(--primary); color: white; border: none; width: 100%; padding: 15px; border-radius: 15px; font-weight: 700; cursor: pointer; transition: 0.2s; }
+        .btn-action:active { transform: scale(0.98); }
+        .admin-item { border-bottom: 1px solid #eee; padding: 15px 0; }
+        .status-btn { font-size: 26px; cursor: pointer; padding: 5px; display: inline-block; -webkit-tap-highlight-color: transparent; }
         .nav-bar { position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); width: 85%; background: white; padding: 12px; border-radius: 20px; display: flex; justify-content: space-around; box-shadow: 0 10px 25px rgba(0,0,0,0.2); z-index: 100; }
-        .nav-link { text-decoration: none; color: #8F9BB3; font-weight: 600; font-size: 14px; }
+        .nav-link { text-decoration: none; color: #8F9BB3; font-weight: 600; font-size: 14px; cursor: pointer; }
         .nav-link.active { color: var(--primary); }
-
         .hidden { display: none; }
         .modal { position: fixed; inset: 0; background: rgba(0,0,0,0.7); display: none; align-items: center; justify-content: center; z-index: 200; }
         .m-box { background: white; padding: 25px; border-radius: 25px; width: 85%; text-align: center; }
@@ -38,51 +28,51 @@
 </head>
 <body>
 
-<div class="bg-canvas"><div class="blob"></div></div>
+<div class="bg-canvas"></div>
 
 <div class="app-frame">
-    <header><h1>Kas TKR-A 🚀</h1></header>
+    <header><h1>KAS TKR-A 🚀</h1><p style="opacity:0.7">SMK N 1 Adiwerna</p></header>
 
     <div id="viewLogin" class="main-card">
-        <h3 style="margin:0;">Siapa namamu?</h3>
-        <div class="search-box"><input type="text" id="inNama" placeholder="Contoh: Ardi"></div>
-        <button class="btn-action" onclick="cekNama()">Cek Tagihan ✨</button>
+        <h3 style="margin:0;">Cek Tagihan Kas</h3>
+        <div class="search-box"><input type="text" id="inNama" placeholder="Ketik nama (Contoh: Ardi)"></div>
+        <button class="btn-action" onclick="cekNama()">Buka Laporan ✨</button>
     </div>
 
     <div id="viewSiswa" class="main-card hidden">
         <h2 id="txtUser" style="color: var(--primary); margin:0;">User</h2>
-        <div id="listMingguan" style="margin-top:15px;"></div>
-        <button class="btn-action" onclick="location.reload()" style="background:#8F9BB3; margin-top:15px;">Kembali</button>
+        <div id="listMingguan" style="margin-top:20px;"></div>
+        <button class="btn-action" onclick="window.location.reload()" style="background:#8F9BB3; margin-top:20px;">Keluar</button>
     </div>
 
     <div id="viewAdmin" class="main-card hidden">
-        <div style="display:flex; justify-content:space-between; margin-bottom:15px; font-size:14px;">
-            <div style="background:#f0f3f8; padding:10px; border-radius:10px;">Saldo: <b id="admSaldo">0</b></div>
-            <div style="background:#f0f3f8; padding:10px; border-radius:10px;">Pending: <b id="admPend" style="color:orange">0</b></div>
+        <div style="display:grid; grid-template-columns: 1fr 1fr; gap:10px; margin-bottom:20px;">
+            <div style="background:#f0f3f8; padding:15px; border-radius:15px;">Saldo Lunas:<br><b id="admSaldo" style="color:var(--success); font-size:18px;">Rp0</b></div>
+            <div style="background:#f0f3f8; padding:15px; border-radius:15px;">Pending:<br><b id="admPend" style="color:orange; font-size:18px;">0</b></div>
         </div>
-        <div style="max-height: 400px; overflow-y: auto;" id="listAdmSiswa"></div>
+        <div style="max-height: 450px; overflow-y: auto;" id="listAdmSiswa"></div>
     </div>
 
     <div id="viewAdminLogin" class="main-card hidden">
         <h3>Akses Bendahara</h3>
         <input type="password" id="pAdm" class="search-box" style="width:100%; box-sizing:border-box;" placeholder="Password">
-        <button class="btn-action" onclick="authAdmin()">Login</button>
+        <button class="btn-action" onclick="authAdmin()">Login Admin</button>
     </div>
 
     <div class="nav-bar">
-        <a href="#" class="nav-link active" id="navHome" onclick="location.reload()">Beranda</a>
-        <a href="#" class="nav-link" id="navAdmin" onclick="gView('viewAdminLogin')">Bendahara</a>
+        <div class="nav-link active" id="navHome" onclick="window.location.reload()">Beranda</div>
+        <div class="nav-link" id="navAdmin" onclick="gView('viewAdminLogin')">Admin</div>
     </div>
 </div>
 
 <div id="modalPay" class="modal">
     <div class="m-box">
-        <h3 style="margin:0;">Bayar Kas</h3>
-        <select id="metod" class="search-box" style="width:100%; margin:15px 0; border: none; font-family: inherit;">
+        <h3>Bayar Kas</h3>
+        <select id="metod" class="search-box" style="width:100%; border:none; font-family:inherit;">
             <option value="tunai">Tunai</option><option value="qris">QRIS</option>
         </select>
         <img id="qImg" src="https://files.catbox.moe/409cau.png" style="width:100%; border-radius:15px; display:none; margin-bottom:15px;">
-        <button class="btn-action" onclick="konfirmasiWA()">Kirim Bukti via WA</button>
+        <button class="btn-action" onclick="konfirmasiWA()">Kirim Bukti WA</button>
         <p onclick="closeM()" style="color:var(--accent); cursor:pointer; margin-top:15px;">Batal</p>
     </div>
 </div>
@@ -118,11 +108,14 @@
 
     let dataKas = {}; let curSiswa = ""; let curWeek = 0;
 
+    // Sinkronisasi Data
     onValue(dbRef, (s) => {
         dataKas = s.val() || {};
+        // Jika sedang di view admin, refresh tampilannya
         if(!document.getElementById('viewAdmin').classList.contains('hidden')) renderAdmin();
     });
 
+    // Ekspos Fungsi ke Window agar bisa dipanggil HTML
     window.gView = (id) => {
         document.querySelectorAll('[id^="view"]').forEach(v => v.classList.add('hidden'));
         document.getElementById(id).classList.remove('hidden');
@@ -136,24 +129,24 @@
         const matches = daftarSiswa.filter(n => n.toLowerCase().includes(key));
         if(matches.length === 1) { curSiswa = matches[0]; showSiswa(); }
         else if(matches.length > 1) {
-            const exact = matches.find(n => n.toLowerCase().split(' ').some(w => w === key));
+            const exact = matches.find(n => n.toLowerCase().split(' ').includes(key));
             if(exact) { curSiswa = exact; showSiswa(); }
-            else alert("Ada beberapa nama serupa, coba ketik lebih lengkap!");
+            else alert("Ditemukan beberapa nama, coba lebih spesifik!");
         } else alert("Nama tidak ditemukan!");
     };
 
-    window.showSiswa = () => {
-        gView('viewSiswa');
+    function showSiswa() {
+        window.gView('viewSiswa');
         document.getElementById('txtUser').innerText = curSiswa;
         let h = "";
         for(let i=1; i<=4; i++) {
             let s = dataKas[curSiswa.replace(/\s/g, '_') + "_m" + i] || "belum";
             let color = s==='lunas'?'var(--success)':(s==='pending'?'orange':'#8F9BB3');
-            h += `<div class="item-row">
+            h += `<div style="display:flex; justify-content:space-between; padding:15px 0; border-bottom:1px solid #eee;">
                 <span style="font-weight:600">Minggu ${i}</span>
                 <div>
                     <span style="color:${color}; font-weight:800; margin-right:10px; font-size:12px;">${s.toUpperCase()}</span>
-                    ${s==='belum'?`<button onclick="openM(${i})" style="border:none; background:var(--primary); color:white; padding:5px 10px; border-radius:8px; font-size:10px; font-weight:700;">BAYAR</button>`:''}
+                    ${s==='belum'?`<button onclick="openM(${i})" style="border:none; background:var(--primary); color:white; padding:6px 12px; border-radius:10px; font-size:10px; font-weight:700;">BAYAR</button>`:''}
                 </div>
             </div>`;
         }
@@ -169,43 +162,38 @@
         const key = curSiswa.replace(/\s/g, '_') + "_m" + curWeek;
         update(dbRef, { [key]: "pending" });
         window.open(`https://wa.me/62895630224260?text=Konfirmasi Kas *${curSiswa}* M${curWeek} (${m})`, '_blank');
-        closeM();
+        window.closeM();
     };
 
     window.authAdmin = () => {
-        if(document.getElementById('pAdm').value === 'bendahara123') { gView('viewAdmin'); renderAdmin(); }
-        else alert("Salah!");
+        if(document.getElementById('pAdm').value === 'bendahara123') { window.gView('viewAdmin'); renderAdmin(); }
+        else alert("Password Salah!");
     };
 
-    window.renderAdmin = () => {
+    function renderAdmin() {
         let total = 0, pend = 0;
         let h = daftarSiswa.map(n => {
             let row = `<div class="admin-item">
-                <div style="font-size:13px; font-weight:700; color:#2E3A59;">${n}</div>
-                <div style="display:flex; gap:15px; margin-top:5px;">`;
+                <div style="font-size:13px; font-weight:700; color:#2E3A59; margin-bottom:8px;">${n}</div>
+                <div style="display:flex; gap:20px;">`;
             for(let i=1; i<=4; i++) {
                 let s = dataKas[n.replace(/\s/g, '_') + "_m" + i] || "belum";
                 if(s==='lunas') total++; if(s==='pending') pend++;
                 let icon = s==='lunas'?'✅':(s==='pending'?'⏳':'⬜');
-                // Penting: Fungsi upStat sekarang terdaftar di window
-                row += `<span class="status-btn" onclick="window.upStat('${n}', ${i}, '${s}')">${icon}</span>`;
+                row += `<span class="status-btn" onclick="upStat('${n}', ${i}, '${s}')">${icon}</span>`;
             }
             return row + `</div></div>`;
         }).join('');
         document.getElementById('listAdmSiswa').innerHTML = h;
-        document.getElementById('admSaldo').innerText = "Rp" + (total * 2000).toLocaleString();
+        // NOMINAL 5000 DISINI
+        document.getElementById('admSaldo').innerText = "Rp" + (total * 5000).toLocaleString('id-ID');
         document.getElementById('admPend').innerText = pend;
     }
 
-    // MEMAKSA FUNGSI MENJADI GLOBAL AGAR BISA DIAKSES HTML
     window.upStat = (nama, minggu, current) => {
         let next = current === 'belum' ? 'pending' : (current === 'pending' ? 'lunas' : 'belum');
         const key = nama.replace(/\s/g, '_') + "_m" + minggu;
-        update(dbRef, { [key]: next }).then(() => {
-            console.log("Update Berhasil");
-        }).catch((err) => {
-            alert("Gagal update: " + err);
-        });
+        update(dbRef, { [key]: next }).catch(e => alert("Error: " + e));
     };
 </script>
 </body>
