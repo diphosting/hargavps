@@ -3,173 +3,156 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Kas TKR-A iOS</title>
-    <link href="https://fonts.googleapis.com/css2?family=SF+Pro+Display:wght@400;600&family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+    <title>Rekap Kas TKR-A</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;800&display=swap" rel="stylesheet">
     <style>
         :root {
-            --ios-blue: #007AFF; --ios-bg: #F2F2F7; --glass: rgba(255, 255, 255, 0.7);
+            --accent: #FF3D71; --primary: #6236FF; --success: #00D68F;
+            --glass: rgba(255, 255, 255, 0.9);
         }
 
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Poppins', sans-serif;
-            margin: 0; padding: 0; background: #000; overflow: hidden;
+            font-family: 'Outfit', sans-serif; margin: 0; padding: 0;
+            background: #060918; color: #1A1A1A; overflow-x: hidden;
         }
 
-        /* iOS Dynamic Background */
-        .wallpaper {
+        /* Fun Moving Background */
+        .bg-canvas {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1;
-            background: linear-gradient(125deg, #1e3c72 0%, #2a5298 50%, #121212 100%);
+            background: radial-gradient(circle at 0% 0%, #1a1e3b 0%, #060918 100%);
+        }
+        .blob {
+            position: absolute; width: 250px; height: 250px; background: var(--primary);
+            filter: blur(80px); border-radius: 50%; opacity: 0.4; animation: drift 15s infinite alternate;
+        }
+        .blob.two { background: var(--accent); right: -50px; top: 20%; animation-duration: 18s; }
+        @keyframes drift { from { transform: translate(0,0); } to { transform: translate(40px, 80px); } }
+
+        /* Container */
+        .app-frame { width: 100%; max-width: 450px; min-height: 100vh; margin: 0 auto; display: flex; flex-direction: column; }
+
+        /* Fun Header */
+        header { padding: 40px 25px 30px; }
+        header h1 { color: white; margin: 0; font-size: 32px; font-weight: 800; letter-spacing: -1px; }
+        header p { color: #8F9BB3; margin: 5px 0 0; font-size: 14px; }
+
+        /* Main Card */
+        .main-card {
+            background: var(--glass); margin: 0 15px 20px; padding: 25px;
+            border-radius: 30px; box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+            animation: popIn 0.6s cubic-bezier(0.17, 0.67, 0.83, 0.67);
+        }
+        @keyframes popIn { from { opacity:0; transform: scale(0.9); } to { opacity:1; transform: scale(1); } }
+
+        /* Fun Inputs */
+        .search-box {
+            background: #EDF1F7; border-radius: 20px; padding: 5px 15px;
+            display: flex; align-items: center; margin: 20px 0;
+        }
+        input {
+            border: none; background: transparent; padding: 15px 10px;
+            width: 100%; font-size: 16px; font-family: inherit; outline: none;
         }
 
-        .floating-objects { position: absolute; width: 100%; height: 100%; overflow: hidden; }
-        .obj { 
-            position: absolute; background: rgba(255,255,255,0.08); 
-            animation: float 18s infinite linear; bottom: -100px;
-        }
-        @keyframes float {
-            0% { transform: translateY(0) rotate(0); opacity: 0; }
-            20% { opacity: 0.6; }
-            100% { transform: translateY(-110vh) rotate(360deg); opacity: 0; }
+        .btn-action {
+            background: linear-gradient(135deg, var(--primary) 0%, #8C67FF 100%);
+            color: white; border: none; width: 100%; padding: 18px;
+            border-radius: 20px; font-size: 16px; font-weight: 700;
+            box-shadow: 0 10px 20px rgba(98, 54, 255, 0.3); cursor: pointer;
         }
 
-        /* Main Container */
-        .iphone-container {
-            width: 100%; max-width: 420px; height: 100vh; margin: 0 auto;
-            background: transparent; display: flex; flex-direction: column; position: relative;
+        /* Status & Table */
+        .status-pill {
+            padding: 6px 14px; border-radius: 12px; font-size: 12px; font-weight: 700;
+            display: inline-block; margin-bottom: 10px;
         }
-
-        /* iOS Header */
-        header {
-            padding: 40px 25px 20px; color: white;
-            background: rgba(0,0,0,0.3); backdrop-filter: blur(20px);
-            border-bottom: 1px solid rgba(255,255,255,0.1);
+        .item-row {
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 15px 0; border-bottom: 1px solid #edf1f7;
         }
-        header h1 { margin: 0; font-size: 28px; font-weight: 700; letter-spacing: -1px; }
+        .name-txt { font-weight: 600; color: #2E3A59; font-size: 14px; }
 
-        /* Card View */
-        .content { flex: 1; padding: 20px; overflow-y: auto; padding-bottom: 100px; }
-        
-        .ios-card {
-            background: var(--glass); backdrop-filter: blur(25px);
-            border-radius: 20px; padding: 20px; margin-bottom: 20px;
-            box-shadow: 0 8px 32px rgba(0,0,0,0.2);
-            border: 1px solid rgba(255,255,255,0.2);
-            animation: slideUp 0.5s ease-out;
+        /* Floating Nav */
+        .nav-bar {
+            position: fixed; bottom: 25px; left: 50%; transform: translateX(-50%);
+            width: 80%; max-width: 300px; background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(15px); padding: 12px 25px;
+            border-radius: 25px; display: flex; justify-content: space-around;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
         }
-        @keyframes slideUp { from { transform: translateY(30px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
-
-        /* iOS Inputs */
-        .ios-input {
-            width: 100%; background: rgba(0,0,0,0.05); border: none;
-            padding: 15px; border-radius: 12px; font-size: 16px; margin: 15px 0;
-            box-sizing: border-box; outline: none;
-        }
-
-        .btn-ios {
-            background: var(--ios-blue); color: white; border: none;
-            width: 100%; padding: 16px; border-radius: 14px;
-            font-size: 17px; font-weight: 600; cursor: pointer;
-            transition: 0.2s;
-        }
-        .btn-ios:active { transform: scale(0.97); opacity: 0.8; }
-
-        /* Table iOS Style */
-        .ios-table { width: 100%; border-collapse: collapse; }
-        .ios-table td { padding: 14px 10px; border-bottom: 0.5px solid rgba(0,0,0,0.05); font-size: 14px; }
-        .name-row { font-weight: 600; color: #1c1c1e; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 150px; }
-
-        /* Bottom Tab Bar */
-        .tab-bar {
-            position: absolute; bottom: 0; width: 100%;
-            height: 85px; background: rgba(255,255,255,0.8);
-            backdrop-filter: blur(20px); display: flex;
-            justify-content: space-around; align-items: center;
-            border-top: 0.5px solid #d1d1d6;
-        }
-        .tab-item { text-align: center; color: #8e8e93; font-size: 11px; font-weight: 500; cursor: pointer; }
-        .tab-item.active { color: var(--ios-blue); }
+        .nav-link { text-decoration: none; color: #8F9BB3; font-size: 12px; font-weight: 600; text-align: center; }
+        .nav-link.active { color: var(--primary); }
 
         .hidden { display: none; }
-
-        /* Modal iOS */
-        .modal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.4); backdrop-filter: blur(5px); z-index: 999; display: none; align-items: center; justify-content: center; }
-        .modal-content { background: white; width: 300px; border-radius: 14px; padding: 20px; text-align: center; }
+        .modal { position: fixed; inset: 0; background: rgba(0,0,0,0.6); display: none; align-items: center; justify-content: center; z-index: 100; }
+        .m-box { background: white; padding: 30px; border-radius: 30px; width: 85%; max-width: 350px; text-align: center; }
     </style>
 </head>
 <body>
 
-<div class="wallpaper">
-    <div class="floating-objects" id="objs"></div>
+<div class="bg-canvas">
+    <div class="blob"></div>
+    <div class="blob two"></div>
 </div>
 
-<div class="iphone-container">
+<div class="app-frame">
     <header>
-        <h1 id="headerTitle">Kas TKR-A</h1>
-        <p style="margin:5px 0 0; opacity: 0.6; font-size: 13px;">SMK Negeri 1 Adiwerna</p>
+        <h1>REKAP KAS TKR-A</h1>
+        <p>Copyright Tobias</p>
     </header>
 
-    <div class="content">
-        <div id="viewLogin" class="ios-card">
-            <h3 style="margin-top:0;">Halo, Siswa!</h3>
-            <p style="color:#666; font-size: 14px;">Masukkan nama untuk melihat laporan kas mingguanmu.</p>
-            <input type="text" id="inputNama" class="ios-input" placeholder="Nama kamu...">
-            <button class="btn-ios" onclick="loginSiswa()">Lanjutkan</button>
+    <div id="viewLogin" class="main-card">
+        <h2 style="margin:0; font-size: 20px;">Siapa namamu?</h2>
+        <div class="search-box">
+            <span>🔍</span>
+            <input type="text" id="inNama" placeholder="Ketik namamu (Contoh: Ardi)">
         </div>
-
-        <div id="viewSiswa" class="hidden">
-            <div class="ios-card">
-                <h3 id="displayNama" style="margin-top:0; color:var(--ios-blue);">Nama Siswa</h3>
-                <div id="summary" style="font-size: 13px; margin-bottom: 15px; padding: 10px; border-radius: 10px;"></div>
-                <table class="ios-table">
-                    <tbody id="listSiswa"></tbody>
-                </table>
-            </div>
-            <button class="btn-ios" style="background:#8e8e93;" onclick="location.reload()">Selesai</button>
-        </div>
-
-        <div id="viewAdmin" class="hidden">
-            <div class="ios-card" style="display:flex; justify-content:space-between; text-align:center;">
-                <div><small>Saldo</small><br><b id="totalKas" style="color:var(--ios-blue)">Rp0</b></div>
-                <div><small>Pending</small><br><b id="totalPend" style="color:#FF9500">0</b></div>
-            </div>
-            <div class="ios-card" style="padding: 10px; overflow-x: auto;">
-                <table class="ios-table">
-                    <tbody id="bodyAdmin"></tbody>
-                </table>
-            </div>
-        </div>
-
-        <div id="viewAdminLogin" class="hidden">
-            <div class="ios-card">
-                <h3>Admin Login</h3>
-                <input type="password" id="passAdmin" class="ios-input" placeholder="Password...">
-                <button class="btn-ios" onclick="loginAdmin()">Masuk</button>
-            </div>
-        </div>
+        <button class="btn-action" onclick="cekNama()">Cek Tagihan ✨</button>
     </div>
 
-    <div class="tab-bar">
-        <div class="tab-item active" onclick="location.reload()">
-            <div style="font-size: 22px;">🏠</div>
-            <span>Beranda</span>
+    <div id="viewSiswa" class="main-card hidden">
+        <div style="display:flex; justify-content:space-between; align-items:center;">
+            <h2 id="txtUser" style="margin:0; font-size: 20px; color: var(--primary);">User</h2>
+            <button onclick="location.reload()" style="background:none; border:none; font-size:18px;">❌</button>
         </div>
-        <div class="tab-item" onclick="gantiView('viewAdminLogin')">
-            <div style="font-size: 22px;">⚙️</div>
-            <span>Admin</span>
+        <div id="tagihanBox" style="margin-top:15px;"></div>
+        <div id="listMingguan"></div>
+    </div>
+
+    <div id="viewAdmin" class="main-card hidden">
+        <div style="display:grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 20px;">
+            <div style="background:#f7f9fc; padding:15px; border-radius:20px;">
+                <small>Total Saldo</small><br><b id="admSaldo" style="color:var(--success)">Rp0</b>
+            </div>
+            <div style="background:#f7f9fc; padding:15px; border-radius:20px;">
+                <small>Pending</small><br><b id="admPend" style="color:var(--accent)">0</b>
+            </div>
         </div>
+        <div style="max-height: 350px; overflow-y: auto;" id="listAdmSiswa"></div>
+    </div>
+
+    <div id="viewAdminLogin" class="main-card hidden">
+        <h3>Akses Bendahara</h3>
+        <input type="password" id="pAdm" class="search-box" style="background:#edf1f7; width:100%; box-sizing:border-box;" placeholder="Password">
+        <button class="btn-action" onclick="authAdmin()">Login</button>
+    </div>
+
+    <div class="nav-bar">
+        <a href="#" class="nav-link active" onclick="location.reload()">Beranda</a>
+        <a href="#" class="nav-link" onclick="gView('viewAdminLogin')">Bendahara</a>
     </div>
 </div>
 
 <div id="modalPay" class="modal">
-    <div class="modal-content">
-        <h4 style="margin-top:0;">Metode Bayar</h4>
-        <select id="metode" onchange="showQR()" class="ios-input" style="background: #f2f2f7;">
-            <option value="tunai">Uang Tunai</option>
-            <option value="qris">Scan QRIS</option>
+    <div class="m-box">
+        <h3 style="margin-top:0;">Bayar Kas 💸</h3>
+        <select id="metod" class="search-box" style="width:100%; background:#f7f9fc; border:none; padding:15px; border-radius:15px;">
+            <option value="tunai">💵 Bayar Tunai</option>
+            <option value="qris">📱 Scan QRIS</option>
         </select>
-        <img id="imgQR" src="https://files.catbox.moe/409cau.png" style="width:100%; display:none; border-radius:10px; margin-bottom:15px;">
-        <button class="btn-ios" onclick="konfirmasiWA()">Konfirmasi</button>
-        <p onclick="closeModal()" style="color:var(--ios-blue); cursor:pointer; margin-top:15px; font-weight:600;">Batal</p>
+        <img id="qImg" src="https://files.catbox.moe/409cau.png" style="width:100%; border-radius:20px; margin: 15px 0; display:none;">
+        <button class="btn-action" onclick="konfirmasiWA()">Konfirmasi WA</button>
+        <p onclick="closeM()" style="margin-top:15px; cursor:pointer; font-weight:600; color:var(--accent)">Nanti Saja</p>
     </div>
 </div>
 
@@ -203,119 +186,100 @@
     ];
 
     let dataKas = {};
-    let activeUser = "";
-    let activeWeek = 0;
-
-    // BG Animation
-    const objs = document.getElementById('objs');
-    const shapes = ['30px','50px','70px'];
-    for(let i=0; i<12; i++){
-        const o = document.createElement('div');
-        o.className = 'obj';
-        let size = shapes[Math.floor(Math.random()*3)];
-        o.style.width = size; o.style.height = size;
-        o.style.left = Math.random()*100+'%';
-        o.style.animationDuration = (10+Math.random()*15)+'s';
-        o.style.animationDelay = Math.random()*10+'s';
-        if(Math.random()>0.5) o.style.borderRadius = '50%';
-        objs.appendChild(o);
-    }
+    let curSiswa = "";
+    let curWeek = 0;
 
     onValue(dbRef, (s) => {
         dataKas = s.val() || {};
         if(!document.getElementById('viewAdmin').classList.contains('hidden')) renderAdmin();
     });
 
-    window.gantiView = (id) => {
+    window.gView = (id) => {
         document.querySelectorAll('[id^="view"]').forEach(v => v.classList.add('hidden'));
         document.getElementById(id).classList.remove('hidden');
-        document.querySelectorAll('.tab-item').forEach(t => t.classList.remove('active'));
-        if(id === 'viewAdminLogin') document.querySelectorAll('.tab-item')[1].classList.add('active');
+        document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
     };
 
-    // SEARCH LOGIC: ANTI GAGAL UNTUK ARDI
-    window.loginSiswa = () => {
-        const inputRaw = document.getElementById('inputNama').value.trim().toLowerCase();
-        if(inputRaw.length < 2) return alert("Masukkan minimal 2 huruf");
+    // LOGIKA PENCARIAN ARDI - SEARCH YANG LEBIH FUN & FLEXIBLE
+    window.cekNama = () => {
+        const key = document.getElementById('inNama').value.trim().toLowerCase();
+        if(key.length < 2) return alert("Ketik minimal 2 huruf!");
 
-        // Normalisasi: Hapus semua titik dan spasi untuk pengecekan
-        const inputClean = inputRaw.replace(/[\s.]/g, "");
+        // 1. Cari kecocokan kata (misal 'ardi' akan mencocokkan 'ardiyansyah')
+        const matches = daftarSiswa.filter(n => n.toLowerCase().includes(key));
 
-        const match = daftarSiswa.filter(nama => {
-            const namaClean = nama.toLowerCase().replace(/[\s.]/g, "");
-            return namaClean.includes(inputClean);
-        });
-
-        if(match.length === 1) {
-            activeUser = match[0];
-            renderSiswa();
-        } else if(match.length > 1) {
-            // Jika mengetik 'ardi', cari yang mengandung kata 'ardi' secara utuh
-            const exact = match.find(n => n.toLowerCase().split(' ').includes(inputRaw));
-            if(exact) { activeUser = exact; renderSiswa(); }
-            else alert("Nama kurang spesifik, coba lebih lengkap!");
+        if(matches.length === 1) {
+            curSiswa = matches[0];
+            showSiswa();
+        } else if(matches.length > 1) {
+            // Jika banyak, cari yang mengandung kata tersebut secara utuh
+            const exact = matches.find(n => n.toLowerCase().split(' ').includes(key));
+            if(exact) { curSiswa = exact; showSiswa(); }
+            else alert("Nama kurang spesifik!");
         } else {
             alert("Nama tidak ditemukan!");
         }
     };
 
-    function renderSiswa() {
-        gantiView('viewSiswa');
-        document.getElementById('displayNama').innerText = activeUser;
-        let html = ""; let nunggak = 0;
-        for(let i=1; i<=4; i++){
-            let s = dataKas[activeUser.replace(/\s/g, '_') + "_m" + i] || "belum";
-            let color = s==='lunas'?'#34C759':(s==='pending'?'#FF9500':'#FF3B30');
+    function showSiswa() {
+        gView('viewSiswa');
+        document.getElementById('txtUser').innerText = curSiswa;
+        let h = ""; let nunggak = 0;
+        for(let i=1; i<=4; i++) {
+            let s = dataKas[curSiswa.replace(/\s/g, '_') + "_m" + i] || "belum";
+            let color = s==='lunas'?'var(--success)':'#8F9BB3';
+            if(s==='pending') color = 'var(--accent)';
             if(s==='belum') nunggak++;
-            html += `<tr>
-                <td>Minggu ${i}</td>
-                <td style="color:${color}; font-weight:600;">${s.toUpperCase()}</td>
-                <td>${s==='belum'?`<button onclick="openPay(${i})" style="border:none; background:var(--ios-blue); color:white; border-radius:8px; padding:6px 12px; font-size:11px;">Bayar</button>`:'-'}</td>
-            </tr>`;
+            h += `<div class="item-row">
+                <span class="name-txt">Minggu ${i}</span>
+                <div style="display:flex; align-items:center;">
+                    <span style="color:${color}; font-weight:700; font-size:12px; margin-right:10px;">${s.toUpperCase()}</span>
+                    ${s==='belum'?`<button onclick="openM(${i})" style="border:none; background:var(--primary); color:white; border-radius:10px; padding:6px 12px; font-size:10px; font-weight:700;">BAYAR</button>`:''}
+                </div>
+            </div>`;
         }
-        document.getElementById('listSiswa').innerHTML = html;
-        const sum = document.getElementById('summary');
-        sum.style.background = nunggak > 0 ? '#FF3B3015' : '#34C75915';
-        sum.style.color = nunggak > 0 ? '#FF3B30' : '#34C759';
-        sum.innerHTML = nunggak > 0 ? `⚠️ Kamu memiliki <b>${nunggak}</b> tagihan.` : `✨ <b>Lunas!</b> Kamu sangat rajin.`;
+        document.getElementById('listMingguan').innerHTML = h;
+        document.getElementById('tagihanBox').innerHTML = nunggak > 0 ? `<div class="status-pill" style="background:#FFE6EB; color:var(--accent)">Kamu nunggak ${nunggak} minggu</div>` : `<div class="status-pill" style="background:#E6FFF7; color:var(--success)">Status: Lunas Aman! ✅</div>`;
     }
 
-    window.openPay = (m) => { activeWeek = m; document.getElementById('modalPay').style.display='flex'; };
-    window.closeModal = () => document.getElementById('modalPay').style.display='none';
-    window.showQR = () => { document.getElementById('imgQR').style.display = document.getElementById('metode').value === 'qris' ? 'block' : 'none'; };
+    window.openM = (w) => { curWeek = w; document.getElementById('modalPay').style.display='flex'; };
+    window.closeM = () => document.getElementById('modalPay').style.display='none';
+    document.getElementById('metod').onchange = (e) => { document.getElementById('qImg').style.display = e.target.value === 'qris' ? 'block' : 'none'; };
 
     window.konfirmasiWA = () => {
-        const m = document.getElementById('metode').value;
-        const key = activeUser.replace(/\s/g, '_') + "_m" + activeWeek;
+        const m = document.getElementById('metod').value;
+        const key = curSiswa.replace(/\s/g, '_') + "_m" + curWeek;
         update(dbRef, { [key]: "pending" });
-        window.open(`https://wa.me/62895630224260?text=Konfirmasi Kas: *${activeUser}* (Minggu ${activeWeek}) via *${m.toUpperCase()}*`, '_blank');
-        closeModal();
+        window.open(`https://wa.me/62895630224260?text=Halo Bendahara, saya *${curSiswa}* mau bayar kas *Minggu ${curWeek}* via *${m.toUpperCase()}*`, '_blank');
+        closeM();
     };
 
-    window.loginAdmin = () => {
-        if(document.getElementById('passAdmin').value === "bendahara123") {
-            gantiView('viewAdmin'); renderAdmin();
-        } else alert("Salah!");
+    window.authAdmin = () => {
+        if(document.getElementById('pAdm').value === 'bendahara123') { gView('viewAdmin'); renderAdmin(); }
+        else alert("Password Salah!");
     };
 
     function renderAdmin() {
         let total = 0, pend = 0;
-        document.getElementById('bodyAdmin').innerHTML = daftarSiswa.map(n => {
-            let row = `<td class="name-row">${n}</td>`;
-            for(let i=1; i<=4; i++){
+        let h = daftarSiswa.map(n => {
+            let row = `<div style="border-bottom:1px solid #eee; padding:10px 0;">
+                <div style="font-size:13px; font-weight:700; margin-bottom:5px;">${n}</div>
+                <div style="display:flex; gap:5px;">`;
+            for(let i=1; i<=4; i++) {
                 let s = dataKas[n.replace(/\s/g, '_') + "_m" + i] || "belum";
                 if(s==='lunas') total++; if(s==='pending') pend++;
                 let icon = s==='lunas'?'✅':(s==='pending'?'⏳':'⬜');
-                row += `<td onclick="upStat('${n}',${i},'${s}')" style="cursor:pointer; text-align:center;">${icon}</td>`;
+                row += `<div onclick="upStat('${n}',${i},'${s}')" style="cursor:pointer; font-size:18px;">${icon}</div>`;
             }
-            return `<tr>${row}</tr>`;
+            return row + `</div></div>`;
         }).join('');
-        document.getElementById('totalKas').innerText = "Rp" + (total * 2000).toLocaleString('id-ID');
-        document.getElementById('totalPend').innerText = pend;
+        document.getElementById('listAdmSiswa').innerHTML = h;
+        document.getElementById('admSaldo').innerText = "Rp" + (total * 2000).toLocaleString();
+        document.getElementById('admPend').innerText = pend;
     }
 
     window.upStat = (n, m, c) => {
-        let next = c === 'belum' ? 'pending' : (c === 'pending' ? 'lunas' : 'belum');
+        let next = c==='belum'?'pending':(c==='pending'?'lunas':'belum');
         update(dbRef, { [n.replace(/\s/g, '_') + "_m" + m]: next });
     };
 </script>
