@@ -3,157 +3,173 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Kas TKR-A Android</title>
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+    <title>Kas TKR-A iOS</title>
+    <link href="https://fonts.googleapis.com/css2?family=SF+Pro+Display:wght@400;600&family=Poppins:wght@400;600&display=swap" rel="stylesheet">
     <style>
         :root {
-            --md-blue: #2196F3; --md-dark: #1976D2; --md-accent: #00BCD4;
-            --white: #ffffff; --bg: #f5f7fa;
+            --ios-blue: #007AFF; --ios-bg: #F2F2F7; --glass: rgba(255, 255, 255, 0.7);
         }
 
         body {
-            font-family: 'Roboto', sans-serif; margin: 0; padding: 0;
-            background: #000; overflow: hidden; color: #333;
+            font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Poppins', sans-serif;
+            margin: 0; padding: 0; background: #000; overflow: hidden;
         }
 
-        /* Live Background */
-        .ocean { height: 100vh; width: 100%; position: fixed; background: linear-gradient(180deg, #0f2027, #203a43, #2c5364); z-index: -2; }
-        .shape {
-            position: absolute; background: rgba(255, 255, 255, 0.1);
-            animation: move 20s linear infinite; bottom: -150px; border-radius: 10px;
+        /* iOS Dynamic Background */
+        .wallpaper {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1;
+            background: linear-gradient(125deg, #1e3c72 0%, #2a5298 50%, #121212 100%);
         }
-        @keyframes move {
-            0% { transform: translateY(0) rotate(0deg); opacity: 0; }
-            50% { opacity: 0.5; }
+
+        .floating-objects { position: absolute; width: 100%; height: 100%; overflow: hidden; }
+        .obj { 
+            position: absolute; background: rgba(255,255,255,0.08); 
+            animation: float 18s infinite linear; bottom: -100px;
+        }
+        @keyframes float {
+            0% { transform: translateY(0) rotate(0); opacity: 0; }
+            20% { opacity: 0.6; }
             100% { transform: translateY(-110vh) rotate(360deg); opacity: 0; }
         }
 
-        /* App Container */
-        .app-shell {
-            width: 100%; max-width: 480px; height: 100vh; margin: 0 auto;
-            background: rgba(255, 255, 255, 0.85); backdrop-filter: blur(20px);
-            position: relative; display: flex; flex-direction: column;
-            box-shadow: 0 0 50px rgba(0,0,0,0.5);
+        /* Main Container */
+        .iphone-container {
+            width: 100%; max-width: 420px; height: 100vh; margin: 0 auto;
+            background: transparent; display: flex; flex-direction: column; position: relative;
         }
 
-        /* Top Bar */
-        .top-bar {
-            padding: 20px; background: var(--md-dark); color: white;
-            border-bottom-left-radius: 25px; border-bottom-right-radius: 25px;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+        /* iOS Header */
+        header {
+            padding: 40px 25px 20px; color: white;
+            background: rgba(0,0,0,0.3); backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+        header h1 { margin: 0; font-size: 28px; font-weight: 700; letter-spacing: -1px; }
+
+        /* Card View */
+        .content { flex: 1; padding: 20px; overflow-y: auto; padding-bottom: 100px; }
+        
+        .ios-card {
+            background: var(--glass); backdrop-filter: blur(25px);
+            border-radius: 20px; padding: 20px; margin-bottom: 20px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.2);
+            border: 1px solid rgba(255,255,255,0.2);
+            animation: slideUp 0.5s ease-out;
+        }
+        @keyframes slideUp { from { transform: translateY(30px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+
+        /* iOS Inputs */
+        .ios-input {
+            width: 100%; background: rgba(0,0,0,0.05); border: none;
+            padding: 15px; border-radius: 12px; font-size: 16px; margin: 15px 0;
+            box-sizing: border-box; outline: none;
         }
 
-        /* Content Area */
-        .main-content { flex: 1; overflow-y: auto; padding: 20px; padding-bottom: 100px; }
-
-        /* Modern Inputs */
-        .input-group { background: white; padding: 5px 15px; border-radius: 15px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); margin-bottom: 20px; }
-        input { border: none; padding: 15px; width: 100%; font-size: 16px; outline: none; background: transparent; box-sizing: border-box; }
-
-        /* Buttons */
-        .btn-fab {
-            background: var(--md-blue); color: white; border: none; padding: 15px 25px;
-            border-radius: 50px; font-weight: bold; cursor: pointer;
-            box-shadow: 0 6px 20px rgba(33, 150, 243, 0.4); width: 100%;
-            transition: 0.3s; margin-top: 10px;
+        .btn-ios {
+            background: var(--ios-blue); color: white; border: none;
+            width: 100%; padding: 16px; border-radius: 14px;
+            font-size: 17px; font-weight: 600; cursor: pointer;
+            transition: 0.2s;
         }
+        .btn-ios:active { transform: scale(0.97); opacity: 0.8; }
 
-        /* Bottom Nav */
-        .bottom-nav {
-            position: absolute; bottom: 0; width: 100%; background: white;
-            display: flex; justify-content: space-around; padding: 10px 0;
-            border-top: 1px solid #eee; border-top-left-radius: 20px; border-top-right-radius: 20px;
+        /* Table iOS Style */
+        .ios-table { width: 100%; border-collapse: collapse; }
+        .ios-table td { padding: 14px 10px; border-bottom: 0.5px solid rgba(0,0,0,0.05); font-size: 14px; }
+        .name-row { font-weight: 600; color: #1c1c1e; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 150px; }
+
+        /* Bottom Tab Bar */
+        .tab-bar {
+            position: absolute; bottom: 0; width: 100%;
+            height: 85px; background: rgba(255,255,255,0.8);
+            backdrop-filter: blur(20px); display: flex;
+            justify-content: space-around; align-items: center;
+            border-top: 0.5px solid #d1d1d6;
         }
-        .nav-item { text-align: center; color: #777; font-size: 12px; cursor: pointer; flex: 1; }
-        .nav-item.active { color: var(--md-blue); font-weight: bold; }
-
-        /* Tables */
-        .data-card { background: white; border-radius: 20px; padding: 15px; margin-bottom: 15px; box-shadow: 0 4px 12px rgba(0,0,0,0.05); }
-        table { width: 100%; border-collapse: collapse; }
-        td { padding: 12px 8px; border-bottom: 1px dotted #eee; font-size: 14px; }
-        .status-tag { padding: 4px 10px; border-radius: 8px; font-size: 11px; font-weight: bold; }
+        .tab-item { text-align: center; color: #8e8e93; font-size: 11px; font-weight: 500; cursor: pointer; }
+        .tab-item.active { color: var(--ios-blue); }
 
         .hidden { display: none; }
-        .modal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); z-index: 1000; display: none; align-items: center; justify-content: center; }
-        .modal-box { background: white; width: 85%; max-width: 350px; border-radius: 25px; padding: 25px; text-align: center; }
+
+        /* Modal iOS */
+        .modal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.4); backdrop-filter: blur(5px); z-index: 999; display: none; align-items: center; justify-content: center; }
+        .modal-content { background: white; width: 300px; border-radius: 14px; padding: 20px; text-align: center; }
     </style>
 </head>
 <body>
 
-<div class="ocean" id="bg"></div>
+<div class="wallpaper">
+    <div class="floating-objects" id="objs"></div>
+</div>
 
-<div class="app-shell">
-    <div class="top-bar">
-        <h2 style="margin:0; font-size: 20px;">Kas TKR-A Online</h2>
-        <span style="font-size: 12px; opacity: 0.8;">Dashboard Siswa & Bendahara</span>
-    </div>
+<div class="iphone-container">
+    <header>
+        <h1 id="headerTitle">Kas TKR-A</h1>
+        <p style="margin:5px 0 0; opacity: 0.6; font-size: 13px;">SMK Negeri 1 Adiwerna</p>
+    </header>
 
-    <div class="main-content">
-        <div id="viewLogin">
-            <div style="text-align:center; margin-bottom: 30px; margin-top: 20px;">
-                <div style="font-size: 50px;">💳</div>
-                <h3>Selamat Datang</h3>
-                <p style="color:#666; font-size: 14px;">Masukkan nama untuk melihat tagihan kas kamu.</p>
-            </div>
-            <div class="input-group">
-                <input type="text" id="inputNama" placeholder="Ketik: Ardi, Zainal, dll">
-            </div>
-            <button class="btn-fab" onclick="authSiswa()">CEK TAGIHAN</button>
+    <div class="content">
+        <div id="viewLogin" class="ios-card">
+            <h3 style="margin-top:0;">Halo, Siswa!</h3>
+            <p style="color:#666; font-size: 14px;">Masukkan nama untuk melihat laporan kas mingguanmu.</p>
+            <input type="text" id="inputNama" class="ios-input" placeholder="Nama kamu...">
+            <button class="btn-ios" onclick="loginSiswa()">Lanjutkan</button>
         </div>
 
         <div id="viewSiswa" class="hidden">
-            <div class="data-card">
-                <h4 id="namaSiswa" style="margin:0; color:var(--md-blue);">User</h4>
-                <p style="font-size: 12px; color:#888;">Berikut rincian kas kamu bulan ini:</p>
-                <table>
-                    <tbody id="listKasSiswa"></tbody>
+            <div class="ios-card">
+                <h3 id="displayNama" style="margin-top:0; color:var(--ios-blue);">Nama Siswa</h3>
+                <div id="summary" style="font-size: 13px; margin-bottom: 15px; padding: 10px; border-radius: 10px;"></div>
+                <table class="ios-table">
+                    <tbody id="listSiswa"></tbody>
                 </table>
             </div>
-            <button class="btn-fab" style="background:#666;" onclick="location.reload()">LOGOUT</button>
+            <button class="btn-ios" style="background:#8e8e93;" onclick="location.reload()">Selesai</button>
         </div>
 
         <div id="viewAdmin" class="hidden">
-            <div class="data-card" style="display:flex; justify-content:space-between; text-align:center;">
-                <div><span style="font-size:11px;">Saldo</span><br><b id="totalSaldo">0</b></div>
-                <div><span style="font-size:11px;">Pending</span><br><b id="totalPending" style="color:orange">0</b></div>
+            <div class="ios-card" style="display:flex; justify-content:space-between; text-align:center;">
+                <div><small>Saldo</small><br><b id="totalKas" style="color:var(--ios-blue)">Rp0</b></div>
+                <div><small>Pending</small><br><b id="totalPend" style="color:#FF9500">0</b></div>
             </div>
-            <div class="data-card" style="overflow-x:auto;">
-                <table style="font-size:12px;">
-                    <thead id="headAdmin"></thead>
+            <div class="ios-card" style="padding: 10px; overflow-x: auto;">
+                <table class="ios-table">
                     <tbody id="bodyAdmin"></tbody>
                 </table>
             </div>
         </div>
 
         <div id="viewAdminLogin" class="hidden">
-            <h3>Akses Bendahara</h3>
-            <div class="input-group">
-                <input type="password" id="passAdmin" placeholder="Masukkan Password">
+            <div class="ios-card">
+                <h3>Admin Login</h3>
+                <input type="password" id="passAdmin" class="ios-input" placeholder="Password...">
+                <button class="btn-ios" onclick="loginAdmin()">Masuk</button>
             </div>
-            <button class="btn-fab" onclick="authAdmin()">LOGIN ADMIN</button>
         </div>
     </div>
 
-    <div class="bottom-nav">
-        <div class="nav-item active" onclick="location.reload()">
-            <span>🏠</span><br>Home
+    <div class="tab-bar">
+        <div class="tab-item active" onclick="location.reload()">
+            <div style="font-size: 22px;">🏠</div>
+            <span>Beranda</span>
         </div>
-        <div class="nav-item" onclick="gantiKeView('viewAdminLogin')">
-            <span>🔑</span><br>Admin
+        <div class="tab-item" onclick="gantiView('viewAdminLogin')">
+            <div style="font-size: 22px;">⚙️</div>
+            <span>Admin</span>
         </div>
     </div>
 </div>
 
 <div id="modalPay" class="modal">
-    <div class="modal-box">
-        <h4>Metode Pembayaran</h4>
-        <select id="selectMetode" onchange="toggleQR()" style="width:100%; padding:12px; border-radius:10px; margin-bottom:15px; border:1px solid #ddd;">
-            <option value="tunai">💵 Bayar Tunai</option>
-            <option value="qris">📱 Scan QRIS</option>
+    <div class="modal-content">
+        <h4 style="margin-top:0;">Metode Bayar</h4>
+        <select id="metode" onchange="showQR()" class="ios-input" style="background: #f2f2f7;">
+            <option value="tunai">Uang Tunai</option>
+            <option value="qris">Scan QRIS</option>
         </select>
-        <img id="imgQR" src="https://files.catbox.moe/409cau.png" style="width:100%; border-radius:15px; display:none; margin-bottom:15px;">
-        <button class="btn-fab" onclick="confirmPayment()">KONFIRMASI SEKARANG</button>
-        <p onclick="closeModal()" style="margin-top:15px; color:red; cursor:pointer; font-size:13px;">Batal</p>
+        <img id="imgQR" src="https://files.catbox.moe/409cau.png" style="width:100%; display:none; border-radius:10px; margin-bottom:15px;">
+        <button class="btn-ios" onclick="konfirmasiWA()">Konfirmasi</button>
+        <p onclick="closeModal()" style="color:var(--ios-blue); cursor:pointer; margin-top:15px; font-weight:600;">Batal</p>
     </div>
 </div>
 
@@ -175,120 +191,131 @@
     const db = getDatabase(app);
     const dbRef = ref(db, 'kas_data');
 
-    // NAMA ARDI SUDAH DIPERBAIKI DI SINI
     const daftarSiswa = [
         "Akhlis Tsani", "Angga Maesya Putra", "Anwarul Fahmi Ramadhani", "Arya Galih Pratama",
         "Ega Ginaryo Al Amin", "Galih Prasetyo", "M. Maulin Supriyanto", "M. Agung Saputra",
         "M. Awalu Rohmatul Gufron", "M. Daffa Nabih", "M. Dwi Rosidin", "M. Fahri Dwi Hermawan",
         "M. Fajar Saputra", "M. Ferdi Hardiyansyah", "M. Ilyas Ahmadi", "M. Imam Solihin",
         "M. Kelvin Ramadhon", "M. Mustofa", "M. Mutamar", "M. Rokhibun Naza", 
-        "M. Zainal Mutaqin", "M. Zikna Afifana", "Maulana Ramadhani", "Ardi",
+        "M. Zainal Mutaqin", "M. Zikna Afifana", "Maulana Ramadhani", "Mohamad Ardiyansyah",
         "Muhamad Khoirul Anam", "Rafi Al Fakhri", "Restu Ando Saputra", "Surya Saputra",
         "Tirta Bayu Saputra", "Tobias Arka Diva", "Wafiq Zam Zami"
     ];
 
     let dataKas = {};
-    let currentUser = "";
+    let activeUser = "";
     let activeWeek = 0;
 
-    // Background Animation
-    const bg = document.getElementById('bg');
-    const colors = ['#FF5722', '#4CAF50', '#2196F3', '#FFEB3B'];
-    for(let i=0; i<15; i++) {
-        const s = document.createElement('div');
-        s.className = 'shape';
-        const size = Math.random() * 60 + 20;
-        s.style.width = size + 'px';
-        s.style.height = size + 'px';
-        s.style.left = Math.random() * 100 + '%';
-        s.style.background = colors[Math.floor(Math.random()*colors.length)] + '22';
-        s.style.animationDuration = (Math.random() * 10 + 10) + 's';
-        s.style.animationDelay = (Math.random() * 10) + 's';
-        if(Math.random() > 0.5) s.style.borderRadius = '50%';
-        bg.appendChild(s);
+    // BG Animation
+    const objs = document.getElementById('objs');
+    const shapes = ['30px','50px','70px'];
+    for(let i=0; i<12; i++){
+        const o = document.createElement('div');
+        o.className = 'obj';
+        let size = shapes[Math.floor(Math.random()*3)];
+        o.style.width = size; o.style.height = size;
+        o.style.left = Math.random()*100+'%';
+        o.style.animationDuration = (10+Math.random()*15)+'s';
+        o.style.animationDelay = Math.random()*10+'s';
+        if(Math.random()>0.5) o.style.borderRadius = '50%';
+        objs.appendChild(o);
     }
 
-    onValue(dbRef, (snap) => {
-        dataKas = snap.val() || {};
+    onValue(dbRef, (s) => {
+        dataKas = s.val() || {};
         if(!document.getElementById('viewAdmin').classList.contains('hidden')) renderAdmin();
     });
 
-    window.gantiKeView = (id) => {
+    window.gantiView = (id) => {
         document.querySelectorAll('[id^="view"]').forEach(v => v.classList.add('hidden'));
         document.getElementById(id).classList.remove('hidden');
-        document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
-        if(id === 'viewAdminLogin') document.querySelectorAll('.nav-item')[1].classList.add('active');
+        document.querySelectorAll('.tab-item').forEach(t => t.classList.remove('active'));
+        if(id === 'viewAdminLogin') document.querySelectorAll('.tab-item')[1].classList.add('active');
     };
 
-    window.authSiswa = () => {
-        const input = document.getElementById('inputNama').value.trim().toLowerCase();
-        if(input.length < 2) return alert("Masukkan minimal 2 huruf");
-        const match = daftarSiswa.filter(n => n.toLowerCase().includes(input));
+    // SEARCH LOGIC: ANTI GAGAL UNTUK ARDI
+    window.loginSiswa = () => {
+        const inputRaw = document.getElementById('inputNama').value.trim().toLowerCase();
+        if(inputRaw.length < 2) return alert("Masukkan minimal 2 huruf");
+
+        // Normalisasi: Hapus semua titik dan spasi untuk pengecekan
+        const inputClean = inputRaw.replace(/[\s.]/g, "");
+
+        const match = daftarSiswa.filter(nama => {
+            const namaClean = nama.toLowerCase().replace(/[\s.]/g, "");
+            return namaClean.includes(inputClean);
+        });
+
         if(match.length === 1) {
-            currentUser = match[0];
-            renderDashboardSiswa();
+            activeUser = match[0];
+            renderSiswa();
         } else if(match.length > 1) {
-            alert("Nama kurang spesifik, masukkan nama lengkap!");
+            // Jika mengetik 'ardi', cari yang mengandung kata 'ardi' secara utuh
+            const exact = match.find(n => n.toLowerCase().split(' ').includes(inputRaw));
+            if(exact) { activeUser = exact; renderSiswa(); }
+            else alert("Nama kurang spesifik, coba lebih lengkap!");
         } else {
             alert("Nama tidak ditemukan!");
         }
     };
 
-    function renderDashboardSiswa() {
-        gantiKeView('viewSiswa');
-        document.getElementById('namaSiswa').innerText = "Halo, " + currentUser;
-        let html = "";
+    function renderSiswa() {
+        gantiView('viewSiswa');
+        document.getElementById('displayNama').innerText = activeUser;
+        let html = ""; let nunggak = 0;
         for(let i=1; i<=4; i++){
-            let status = dataKas[currentUser.replace(/\s/g, '_') + "_m" + i] || "belum";
-            let color = status==='lunas'?'#4CAF50':(status==='pending'?'#FF9800':'#F44336');
-            let icon = status==='lunas'?'✅':(status==='pending'?'⏳':'⬜');
+            let s = dataKas[activeUser.replace(/\s/g, '_') + "_m" + i] || "belum";
+            let color = s==='lunas'?'#34C759':(s==='pending'?'#FF9500':'#FF3B30');
+            if(s==='belum') nunggak++;
             html += `<tr>
-                <td>Minggu ke-${i}</td>
-                <td><span class="status-tag" style="background:${color}22; color:${color}">${icon} ${status.toUpperCase()}</span></td>
-                <td>${status==='belum'?`<button onclick="openPay(${i})" style="border:none; background:var(--md-blue); color:white; border-radius:8px; padding:5px 10px; font-size:10px;">BAYAR</button>`:'-'}</td>
+                <td>Minggu ${i}</td>
+                <td style="color:${color}; font-weight:600;">${s.toUpperCase()}</td>
+                <td>${s==='belum'?`<button onclick="openPay(${i})" style="border:none; background:var(--ios-blue); color:white; border-radius:8px; padding:6px 12px; font-size:11px;">Bayar</button>`:'-'}</td>
             </tr>`;
         }
-        document.getElementById('listKasSiswa').innerHTML = html;
+        document.getElementById('listSiswa').innerHTML = html;
+        const sum = document.getElementById('summary');
+        sum.style.background = nunggak > 0 ? '#FF3B3015' : '#34C75915';
+        sum.style.color = nunggak > 0 ? '#FF3B30' : '#34C759';
+        sum.innerHTML = nunggak > 0 ? `⚠️ Kamu memiliki <b>${nunggak}</b> tagihan.` : `✨ <b>Lunas!</b> Kamu sangat rajin.`;
     }
 
     window.openPay = (m) => { activeWeek = m; document.getElementById('modalPay').style.display='flex'; };
     window.closeModal = () => document.getElementById('modalPay').style.display='none';
-    window.toggleQR = () => { document.getElementById('imgQR').style.display = document.getElementById('selectMetode').value === 'qris' ? 'block' : 'none'; };
+    window.showQR = () => { document.getElementById('imgQR').style.display = document.getElementById('metode').value === 'qris' ? 'block' : 'none'; };
 
-    window.confirmPayment = () => {
-        const metode = document.getElementById('selectMetode').value;
-        const key = currentUser.replace(/\s/g, '_') + "_m" + activeWeek;
+    window.konfirmasiWA = () => {
+        const m = document.getElementById('metode').value;
+        const key = activeUser.replace(/\s/g, '_') + "_m" + activeWeek;
         update(dbRef, { [key]: "pending" });
-        window.open(`https://wa.me/62895630224260?text=Konfirmasi Kas *${currentUser}* M${activeWeek} via *${metode.toUpperCase()}*`, '_blank');
+        window.open(`https://wa.me/62895630224260?text=Konfirmasi Kas: *${activeUser}* (Minggu ${activeWeek}) via *${m.toUpperCase()}*`, '_blank');
         closeModal();
     };
 
-    window.authAdmin = () => {
+    window.loginAdmin = () => {
         if(document.getElementById('passAdmin').value === "bendahara123") {
-            gantiKeView('viewAdmin');
-            renderAdmin();
-        } else alert("Password Salah!");
+            gantiView('viewAdmin'); renderAdmin();
+        } else alert("Salah!");
     };
 
     function renderAdmin() {
-        document.getElementById('headAdmin').innerHTML = `<tr><th>Siswa</th><th>M1</th><th>M2</th><th>M3</th><th>M4</th></tr>`;
-        let total = 0, pending = 0;
+        let total = 0, pend = 0;
         document.getElementById('bodyAdmin').innerHTML = daftarSiswa.map(n => {
-            let row = `<td style="font-weight:bold;">${n.split(' ')[0]}</td>`;
+            let row = `<td class="name-row">${n}</td>`;
             for(let i=1; i<=4; i++){
                 let s = dataKas[n.replace(/\s/g, '_') + "_m" + i] || "belum";
-                if(s==='lunas') total++; if(s==='pending') pending++;
+                if(s==='lunas') total++; if(s==='pending') pend++;
                 let icon = s==='lunas'?'✅':(s==='pending'?'⏳':'⬜');
-                row += `<td onclick="updateStatAdmin('${n}',${i},'${s}')" style="cursor:pointer; text-align:center;">${icon}</td>`;
+                row += `<td onclick="upStat('${n}',${i},'${s}')" style="cursor:pointer; text-align:center;">${icon}</td>`;
             }
             return `<tr>${row}</tr>`;
         }).join('');
-        document.getElementById('totalSaldo').innerText = "Rp" + (total * 2000).toLocaleString();
-        document.getElementById('totalPending').innerText = pending;
+        document.getElementById('totalKas').innerText = "Rp" + (total * 2000).toLocaleString('id-ID');
+        document.getElementById('totalPend').innerText = pend;
     }
 
-    window.updateStatAdmin = (n, m, cur) => {
-        let next = cur === 'belum' ? 'pending' : (cur === 'pending' ? 'lunas' : 'belum');
+    window.upStat = (n, m, c) => {
+        let next = c === 'belum' ? 'pending' : (c === 'pending' ? 'lunas' : 'belum');
         update(dbRef, { [n.replace(/\s/g, '_') + "_m" + m]: next });
     };
 </script>
