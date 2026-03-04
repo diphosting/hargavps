@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sistem Kas Kelas v7.1 - Secure Payment</title>
+    <title>Sistem Kas Kelas v7.2 - Admin Dashboard</title>
     <style>
         :root {
             --primary: #00d2ff; --secondary: #3a7bd5; --success: #00b09b;
@@ -15,7 +15,13 @@
         body { font-family: 'Poppins', sans-serif; background: var(--bg); display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; padding: 15px; }
         
         .card { background: var(--white); padding: 30px; border-radius: 25px; box-shadow: 0 15px 35px rgba(58, 123, 213, 0.15); width: 100%; max-width: 450px; text-align: center; box-sizing: border-box; }
-        .admin-card { max-width: 950px; }
+        .admin-card { max-width: 1000px; }
+
+        /* Dashboard Stats */
+        .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 10px; margin-bottom: 25px; }
+        .stat-item { background: #f8fbff; padding: 15px; border-radius: 15px; border: 1px solid #edf2f7; text-align: center; }
+        .stat-item span { display: block; font-size: 11px; color: #7f8c8d; text-transform: uppercase; }
+        .stat-item b { font-size: 16px; color: var(--secondary); }
 
         h2 { color: var(--secondary); margin-bottom: 5px; }
         .subtitle { color: #7f8c8d; margin-bottom: 25px; font-size: 14px; }
@@ -42,15 +48,15 @@
         .qr-img { width: 100%; max-width: 250px; margin: 15px auto; display: block; border: 5px solid #f1f2f6; border-radius: 10px; }
         
         .hidden { display: none; }
-        .scroll-table { overflow-x: auto; }
+        .scroll-table { overflow-x: auto; max-height: 400px; overflow-y: auto; border-radius: 15px; }
     </style>
 </head>
 <body>
 
 <div id="viewLogin" class="card">
     <div class="badge-minggu" id="infoTglOtomatis">Memuat...</div>
-    <h2>TKR A KAS</h2>
-    <p class="subtitle" id="labelBulan">Maret 2026</p>
+    <h2>🛠️ KAS TKR A 🛠️</h2>
+    <p class="subtitle" id="labelBulan">Februari - Maret 2026</p>
     <input type="text" id="inputCariNama" placeholder="Ketik namamu...">
     <button class="btn-primary" onclick="prosesLoginSiswa()">Cek Status Kas</button>
     <button class="btn-ghost" onclick="gantiKeView('viewAdminLogin')">Login Bendahara</button>
@@ -67,8 +73,16 @@
 </div>
 
 <div id="viewAdminPanel" class="card admin-card hidden">
-    <h2>Panel Konfirmasi Bendahara</h2>
-    <p class="subtitle">Klik kotak untuk ubah: Kosong -> Pending -> Lunas</p>
+    <h2>Dashboard Bendahara</h2>
+    
+    <div class="stats-grid">
+        <div class="stat-item"><span>Saldo Kas</span><b id="statSaldo">Rp0</b></div>
+        <div class="stat-item"><span>Lunas (Total)</span><b id="statLunas">0</b></div>
+        <div class="stat-item"><span>Pending</span><b id="statPending" style="color:var(--warning)">0</b></div>
+        <div class="stat-item"><span>Lunas Semua</span><b id="statTeladan" style="color:var(--success)">0</b></div>
+        <div class="stat-item"><span>Belum Kas (0 Kas)</span><b id="statZonk" style="color:var(--danger)">0</b></div>
+    </div>
+
     <div class="scroll-table">
         <table id="tabelAdmin">
             <thead id="headAdmin"></thead>
@@ -92,16 +106,13 @@
             <option value="qris">Scan QRIS (Otomatis)</option>
             <option value="tunai">Tunai / Bayar Langsung</option>
         </select>
-        
         <div id="areaQRIS">
-            <img src="https://files.catbox.moe/409cau.png" class="qr-img" alt="QRIS Kas">
-            <p style="font-size: 12px; color: #636e72;">Silahkan scan dan bayar menggunakan aplikasi E-Wallet/Bank</p>
+            <img src="https://files.catbox.moe/409cau.png" class="qr-img">
+            <p style="font-size: 12px; color: #636e72;">Silahkan scan dan bayar</p>
         </div>
-
         <div id="areaTunai" class="hidden">
-            <p style="padding: 20px; background: #f8f9fa; border-radius: 10px; font-size: 14px;">Silahkan serahkan uang tunai ke Bendahara setelah mengklik tombol di bawah.</p>
+            <p style="padding: 20px; background: #f8f9fa; border-radius: 10px; font-size: 14px;">Serahkan uang tunai ke Bendahara.</p>
         </div>
-
         <button class="btn-primary" onclick="kirimKonfirmasiWA()">Konfirmasi & Kirim WA</button>
         <button class="btn-ghost" style="color:var(--danger)" onclick="tutupModal()">Batal</button>
     </div>
@@ -114,13 +125,15 @@
         "M. Awalu Rohmatul Gufron", "M. Daffa Nabih", "M. Dwi Rosidin", "M. Fahri Dwi Hermawan",
         "M. Fajar Saputra", "M. Ferdi Hardiyansyah", "M. Ilyas Ahmadi", "M. Imam Solihin",
         "M. Kelvin Ramadhon", "M. Mustofa", "M. Mutamar", "M. Rokhibun Naza", 
-        "M. Zainal Mutaqin", "M. Zikna Afifana", "Maulana Ramadhani", "Mohamad Ardiyansyah",
+        "M. Zainal Mutaqin", "M. Zikna Afifana", "Maulana Ramadhani", "Ardi Mohamad Ardiyansyah",
         "Muhamad Khoirul Anam", "Rafi Al Fakhri", "Restu Ando Saputra", "Surya Saputra",
         "Tirta Bayu Saputra", "Tobias Arka Diva", "Wafiq Zam Zami"
     ];
 
     const NO_WA = "62895630224260";
     const PASS_ADMIN = "bendahara123";
+    const NOMINAL_KAS = 5000; // GANTI NOMINAL KAS PER MINGGU DI SINI
+    
     let dbKas = JSON.parse(localStorage.getItem('db_kas_secure_v7')) || {};
     let dataAktif = {};
 
@@ -144,40 +157,26 @@
         if(key.length < 3) return alert("Ketik minimal 3 huruf!");
         const match = daftarSiswa.filter(n => n.toLowerCase().includes(key));
         if(match.length === 1) renderDashboardSiswa(match[0]);
-        else alert("Nama tidak ditemukan atau ketik lebih lengkap!");
+        else alert("Nama tidak ditemukan!");
     }
 
     function renderDashboardSiswa(nama) {
         gantiKeView('viewSiswa');
         document.getElementById('namaUser').innerText = "Halo, " + nama.split(' ')[0];
         let html = ""; let nunggak = 0;
-        
         for(let i=1; i<=Math.max(4, MINGGU_INI); i++) {
             let status = dbKas[nama + "_m" + i] || "belum";
             let txt = "❌ Belum"; let col = "#e74c3c";
             if(status === "lunas") { txt = "✅ Lunas"; col = "#2ecc71"; }
             else if(status === "pending") { txt = "⏳ Pending"; col = "#f1c40f"; }
             else { nunggak++; }
-
-            html += `<tr>
-                <td>M${i}</td>
-                <td style="font-weight:bold; color:${col}">${txt}</td>
-                <td>${status === "belum" ? `<button class="btn-bayar" onclick="bukaModal('${nama}', ${i})">BAYAR</button>` : '-'}</td>
-            </tr>`;
+            html += `<tr><td>M${i}</td><td style="font-weight:bold; color:${col}">${txt}</td><td>${status === "belum" ? `<button class="btn-bayar" onclick="bukaModal('${nama}', ${i})">BAYAR</button>` : '-'}</td></tr>`;
         }
         document.getElementById('listKasSiswa').innerHTML = html;
-        const box = document.getElementById('boxStatus');
-        if(nunggak > 0) { box.className="status-box tunggakan-box"; box.innerHTML=`Kamu nunggak <b>${nunggak}</b> minggu.`; }
-        else { box.className="status-box lunas-box"; box.innerHTML=`Semua aman!`; }
     }
 
-    function bukaModal(nama, m) {
-        dataAktif = { nama, m };
-        document.getElementById('modalBayar').style.display = 'flex';
-    }
-
+    function bukaModal(nama, m) { dataAktif = { nama, m }; document.getElementById('modalBayar').style.display = 'flex'; }
     function tutupModal() { document.getElementById('modalBayar').style.display = 'none'; }
-
     function toggleMetode() {
         const m = document.getElementById('metodeBayar').value;
         document.getElementById('areaQRIS').classList.toggle('hidden', m !== 'qris');
@@ -186,17 +185,14 @@
 
     function kirimKonfirmasiWA() {
         const metode = document.getElementById('metodeBayar').value;
-        const pesan = `Halo Bendahara, saya *${dataAktif.nama}* ingin konfirmasi bayar kas *Minggu ke-${dataAktif.m}* melalui *${metode.toUpperCase()}*. Mohon dicek ya!`;
-        
+        const pesan = `Halo Bendahara, saya *${dataAktif.nama}* ingin konfirmasi bayar kas *Minggu ke-${dataAktif.m}* melalui *${metode.toUpperCase()}*.`;
         dbKas[dataAktif.nama + "_m" + dataAktif.m] = "pending";
         localStorage.setItem('db_kas_secure_v7', JSON.stringify(dbKas));
-        
         window.open(`https://wa.me/${NO_WA}?text=${encodeURIComponent(pesan)}`, '_blank');
-        
-        alert("Status berubah jadi PENDING. Silahkan tunggu konfirmasi bendahara.");
         location.reload();
     }
 
+    // --- ADMIN DASHBOARD ---
     function prosesLoginAdmin() {
         if(document.getElementById('passAdmin').value === PASS_ADMIN) {
             gantiKeView('viewAdminPanel');
@@ -209,20 +205,39 @@
         const body = document.getElementById('bodyAdmin');
         let limit = Math.max(4, MINGGU_INI);
         
+        // Header
         let hHtml = "<tr><th>Nama</th>";
         for(let i=1; i<=limit; i++) hHtml += `<th>M${i}</th>`;
         head.innerHTML = hHtml + "</tr>";
 
+        // Stats Variables
+        let totalLunas = 0;
+        let totalPending = 0;
+        let lunasSemuaCount = 0;
+        let zonkCount = 0;
+
         body.innerHTML = "";
         daftarSiswa.forEach(n => {
             let row = `<tr><td>${n}</td>`;
+            let bayarSiswa = 0;
             for(let i=1; i<=limit; i++) {
                 let status = dbKas[n + "_m" + i] || "belum";
-                let icon = status === "lunas" ? "✅" : (status === "pending" ? "⏳" : "⬜");
+                let icon = "⬜";
+                if(status === "lunas") { icon = "✅"; totalLunas++; bayarSiswa++; }
+                else if(status === "pending") { icon = "⏳"; totalPending++; }
                 row += `<td style="cursor:pointer; text-align:center" onclick="siklusStatus('${n}', ${i})">${icon}</td>`;
             }
+            if(bayarSiswa === limit) lunasSemuaCount++;
+            if(bayarSiswa === 0) zonkCount++;
             body.innerHTML += row + "</tr>";
         });
+
+        // Update Stats UI
+        document.getElementById('statSaldo').innerText = "Rp" + (totalLunas * NOMINAL_KAS).toLocaleString('id-ID');
+        document.getElementById('statLunas').innerText = totalLunas;
+        document.getElementById('statPending').innerText = totalPending;
+        document.getElementById('statTeladan').innerText = lunasSemuaCount;
+        document.getElementById('statZonk').innerText = zonkCount;
     }
 
     function siklusStatus(nama, m) {
@@ -231,7 +246,6 @@
         if(current === "belum") dbKas[key] = "pending";
         else if(current === "pending") dbKas[key] = "lunas";
         else dbKas[key] = "belum";
-        
         localStorage.setItem('db_kas_secure_v7', JSON.stringify(dbKas));
         renderAdmin();
     }
